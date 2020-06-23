@@ -1,5 +1,4 @@
 ## PushAllSender
-----
 
 ![PHP Composer](https://github.com/ArtARTs36/PushAllSender/workflows/PHP%20Composer/badge.svg?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
