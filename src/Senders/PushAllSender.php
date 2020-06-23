@@ -16,9 +16,6 @@ class PushAllSender implements PusherInterface
 {
     public const ERROR_WRONG_KEY = 'wrong key';
 
-    /** @var int  */
-    public const PRIORITY = 1;
-
     /** @var string  */
     public const API_URL = 'https://pushall.ru/api.php';
 
@@ -59,7 +56,7 @@ class PushAllSender implements PusherInterface
             'key' => $this->apiKey,
             'text' => $push->message,
             'title' => $push->title,
-            'priority' => static::PRIORITY,
+            'priority' => $push->getPriority(),
         ];
 
         if ($push->url !== null) {
