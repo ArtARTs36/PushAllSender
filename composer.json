@@ -8,11 +8,22 @@
             "email": "temicska99@mail.ru"
         }
     ],
-    "require": {},
+    "require": {
+        "phpunit/phpunit": "^8.0",
+        "squizlabs/php_codesniffer": "3.*"
+    },
     "description": "Push Sender",
     "autoload": {
         "psr-4": {
-            "ArtARTs36\\PushAllSender": "src/"
+            "ArtARTs36\\PushAllSender\\": "src/"
         }
+    },
+    "scripts": {
+        "lint": [
+            "./vendor/bin/phpcs --standard=PSR2 src/"
+        ],
+        "test": [
+            "./vendor/bin/phpunit -v --coverage-text --colors=always --configuration phpunit.xml"
+        ]
     }
 }

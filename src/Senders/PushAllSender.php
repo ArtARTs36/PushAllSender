@@ -4,6 +4,7 @@ namespace ArtARTs36\PushAllSender\Senders;
 
 use ArtARTs36\PushAllSender\Exceptions\PushException;
 use ArtARTs36\PushAllSender\Exceptions\PushUndefinedException;
+use ArtARTs36\PushAllSender\Exceptions\PushWrongApiKeyException;
 use ArtARTs36\PushAllSender\Interfaces\PusherInterface;
 use ArtARTs36\PushAllSender\Push;
 
@@ -13,6 +14,8 @@ use ArtARTs36\PushAllSender\Push;
  */
 class PushAllSender implements PusherInterface
 {
+    public const ERROR_WRONG_KEY = 'wrong key';
+
     /** @var int  */
     public const PRIORITY = 1;
 
@@ -26,7 +29,7 @@ class PushAllSender implements PusherInterface
     private $apiKey;
 
     /** @var mixed */
-    private $answer;
+    protected $answer;
 
     /**
      * PushAllSender constructor.
@@ -81,7 +84,13 @@ class PushAllSender implements PusherInterface
         }
 
         if (($answer = $this->getAnswer()) && !empty($answer['error'])) {
-            throw new PushException($answer['error']);
+            switch ($answer['error']) {
+                case static::ERROR_WRONG_KEY:
+                    throw new PushWrongApiKeyException();
+
+                default:
+                    throw new PushException($answer['error']);
+            }
         }
 
         throw new PushUndefinedException();
@@ -91,7 +100,7 @@ class PushAllSender implements PusherInterface
      * @param array $data
      * @return bool
      */
-    private function send(array $data)
+    protected function send(array $data): bool
     {
         curl_setopt_array(
             $ch = curl_init(),
@@ -105,18 +114,25 @@ class PushAllSender implements PusherInterface
         $result = curl_exec($ch);
         curl_close($ch);
 
-        return $this->analyseAnswer($result);
+        $this->parseAnswer($result);
+
+        return $this->analyseAnswer();
     }
 
     /**
-     * @param $result
+     * @param mixed $answer
+     */
+    protected function parseAnswer($answer): void
+    {
+        $this->answer = json_decode($answer, true) ?? null;
+    }
+
+    /**
      * @return bool
      */
-    protected function analyseAnswer($result): bool
+    protected function analyseAnswer(): bool
     {
-        $this->answer = $result = json_decode($result, true) ?? null;
-
-        if (is_array($result) && !empty($result['success']) && $result['success'] === 1) {
+        if (is_array($this->answer) && !empty($this->answer['success']) && $this->answer['success'] === 1) {
             return true;
         }
 

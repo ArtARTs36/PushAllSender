@@ -7,7 +7,7 @@ use ArtARTs36\PushAllSender\Push;
 
 /**
  * Interface PusherInterface
- * @package App\Senders
+ * @package ArtARTs36\PushAllSender\Interfaces
  */
 interface PusherInterface
 {
