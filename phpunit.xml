@@ -13,6 +13,9 @@
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="PushAllSenderTest.php">./tests/Unit</directory>
+            <directory suffix="HourTest.php">./tests/Unit</directory>
+            <directory suffix="NightMinPriorityStrategyTest.php">./tests/Unit</directory>
+            <directory suffix="PushTest.php">./tests/Unit</directory>
         </testsuite>
     </testsuites>
     <filter>
