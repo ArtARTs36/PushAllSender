@@ -33,10 +33,10 @@ class PushAllSender implements PusherInterface
 
     /**
      * PushAllSender constructor.
-     * @param $channelId
-     * @param $apiKey
+     * @param int $channelId
+     * @param string $apiKey
      */
-    public function __construct($channelId, $apiKey)
+    public function __construct(int $channelId, string $apiKey)
     {
         $this->channelId = $channelId;
         $this->apiKey = $apiKey;
@@ -51,7 +51,7 @@ class PushAllSender implements PusherInterface
      * @param Push $push
      * @return bool|mixed|null
      */
-    public function push(Push $push)
+    public function push(Push $push): bool
     {
         $request = [
             'type' => 'broadcast',
@@ -77,7 +77,7 @@ class PushAllSender implements PusherInterface
     /**
      * @inheritDoc
      */
-    public function pushOrFail(Push $push)
+    public function pushOrFail(Push $push): bool
     {
         if (($msg = $this->push($push))) {
             return $msg;

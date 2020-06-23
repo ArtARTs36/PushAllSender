@@ -15,12 +15,12 @@ interface PusherInterface
      * @param Push $push
      * @return mixed
      */
-    public function push(Push $push);
+    public function push(Push $push): bool;
 
     /**
      * @param Push $push
      * @throws PushException
      * @return mixed
      */
-    public function pushOrFail(Push $push);
+    public function pushOrFail(Push $push): bool;
 }
