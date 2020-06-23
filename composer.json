@@ -3,7 +3,7 @@
     "type": "library",
     "license": "MIT",
     "keywords" : [
-        "php", "pushall.ru", "api", "push", "notification", "mobile"
+        "php", "pushall.ru", "api", "push", "notification", "mobile", "laravel", "symfony", "yii"
     ],
     "authors": [
         {
