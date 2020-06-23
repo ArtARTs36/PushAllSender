@@ -2,6 +2,9 @@
     "name": "artarts36/pushall-sender",
     "type": "library",
     "license": "MIT",
+    "keywords" : [
+        "php", "pushall.ru", "api", "push", "notification", "mobile"
+    ],
     "authors": [
         {
             "name": "ArtARTs36",

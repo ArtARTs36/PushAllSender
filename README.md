@@ -1,7 +1,9 @@
 ## PushAllSender
 ----
 
-Client for send push-notifications on API pushall.ru
+Client for send push-notifications on API https://pushall.ru
+
+PushAll API Documentation: https://pushall.ru/blog/api
 
 ----
 
