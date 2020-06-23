@@ -11,7 +11,7 @@ PushAll API Documentation: https://pushall.ru/blog/api
 
 ----
 
-###Installation:
+### Installation:
 
 `composer require artarts36/pushall-sender`
 
