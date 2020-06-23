@@ -10,4 +10,3 @@ class PushException extends \Exception
 {
 
 }
-

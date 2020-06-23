@@ -33,7 +33,8 @@ class Push
         string $title = null,
         string $message = null,
         PushRecipientInterface $user = null,
-        string $url = null) {
+        string $url = null
+    ) {
         $this->title = $title;
         $this->message = $message;
         $this->recipient = $user;

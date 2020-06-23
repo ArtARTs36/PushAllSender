@@ -24,4 +24,3 @@ interface PusherInterface
      */
     public function pushOrFail(Push $push);
 }
-
