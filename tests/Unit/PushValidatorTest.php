@@ -5,6 +5,7 @@ namespace ArtARTs36\PushAllSender\Tests\Unit;
 use ArtARTs36\PushAllSender\Push;
 use ArtARTs36\PushAllSender\Strategies\RecipientFriendlyStrategy\RecipientFriendlyStrategyInterface;
 use ArtARTs36\PushAllSender\Validators\PushValidator;
+use ArtARTs36\PushAllSender\Validators\Rules\ActionsCountRule;
 use ArtARTs36\PushAllSender\Validators\Rules\MessageLengthRule;
 use ArtARTs36\PushAllSender\Validators\Rules\PriorityRule;
 use ArtARTs36\PushAllSender\Validators\Rules\TitleLengthRule;
@@ -182,6 +183,36 @@ class PushValidatorTest extends TestCase
         self::assertTrue($rule->isValid($push));
         self::assertTrue($rule->isValid($push));
         self::assertInstanceOf(TypeRule::class, $validator->getLastErrorRule());
+    }
+
+    /**
+     * @covers \ArtARTs36\PushAllSender\Validators\Rules\ActionsCountRule
+     */
+    public function testActionCountRule(): void
+    {
+        $rule = new ActionsCountRule();
+
+        $push = new Push('Title', 'Message');
+
+        $actionParams = ['Title', 'http://site.ru'];
+
+        // 1 action
+
+        $push->additional()->addAction(...$actionParams);
+
+        self::assertTrue($rule->isValid($push));
+
+        // 2 actions
+
+        $push->additional()->addAction(...$actionParams);
+
+        self::assertTrue($rule->isValid($push));
+
+        // 3 actions
+
+        $push->additional()->addAction(...$actionParams);
+
+        self::assertFalse($rule->isValid($push));
     }
 
     /**

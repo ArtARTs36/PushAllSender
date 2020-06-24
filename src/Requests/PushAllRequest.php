@@ -18,6 +18,8 @@ class PushAllRequest
     public const FIELD_URL = 'url';
     public const FIELD_PRIORITY = 'priority';
     public const FIELD_UID = 'uid';
+    public const FIELD_ADDITIONAL = 'additional';
+    public const FIELD_ACTIONS = 'actions';
 
     private $attributes;
 
@@ -41,6 +43,16 @@ class PushAllRequest
             $this->setType(Push::TYPE_UNICAST);
             $this->setAttribute(static::FIELD_UID, $id);
         }
+
+        if (!$push->additional()->isEmpty()) {
+            $this->attributes = array_merge($this->attributes, $push->additional()->toArray());
+        }
+
+        $this->setAttributeWhen(
+            !$push->additional()->isEmpty(),
+            static::FIELD_ADDITIONAL,
+            json_encode($push->additional()->toArray())
+        );
     }
 
     /**

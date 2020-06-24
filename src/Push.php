@@ -45,7 +45,10 @@ class Push
     /** @var string|null  */
     public $url;
 
+    /** @var string|null */
     private $type;
+
+    private $additional;
 
     /**
      * Push constructor.
@@ -55,6 +58,7 @@ class Push
      * @param string|null $url
      * @param RecipientFriendlyStrategyInterface $recipientFriendlyStrategy
      * @param string $type
+     * @param PushAdditional|null $additional
      */
     public function __construct(
         string $title,
@@ -62,7 +66,8 @@ class Push
         ?PushRecipientInterface $recipient = null,
         ?string $url = null,
         RecipientFriendlyStrategyInterface $recipientFriendlyStrategy = null,
-        ?string $type = null
+        ?string $type = null,
+        ?PushAdditional $additional = null
     ) {
         $this->title = $title;
         $this->message = $message;
@@ -72,6 +77,7 @@ class Push
         $this->setPriority(($recipientFriendlyStrategy ?? (new NightMinPriorityStrategy()))->getPriority());
 
         $this->type = $type ?? static::TYPE_BROADCAST;
+        $this->additional = $additional ?? new PushAdditional();
     }
 
     /**
@@ -133,5 +139,13 @@ class Push
     public function getType(): string
     {
         return $this->type;
+    }
+
+    /**
+     * @return PushAdditional
+     */
+    public function additional(): PushAdditional
+    {
+        return $this->additional;
     }
 }

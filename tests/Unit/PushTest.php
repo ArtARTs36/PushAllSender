@@ -15,6 +15,7 @@ class PushTest extends TestCase
 {
     /**
      * @covers \ArtARTs36\PushAllSender\Push::__construct
+     * @covers \ArtARTs36\PushAllSender\Push::additional
      */
     public function testCreateInstance(): void
     {
@@ -30,6 +31,8 @@ class PushTest extends TestCase
         self::assertNull($push->url);
         self::assertEquals($defaultStrategy->getPriority(), $push->getPriority());
         self::assertEquals(Push::TYPE_BROADCAST, $push->getType());
+
+        self::assertEmpty($push->additional()->getActions());
     }
 
     /**

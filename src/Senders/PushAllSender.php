@@ -11,6 +11,7 @@ use ArtARTs36\PushAllSender\Interfaces\PushValidatorInterface;
 use ArtARTs36\PushAllSender\Push;
 use ArtARTs36\PushAllSender\Requests\PushAllRequest;
 use ArtARTs36\PushAllSender\Validators\PushValidator;
+use ArtARTs36\PushAllSender\Validators\Rules\ActionsCountRule;
 use ArtARTs36\PushAllSender\Validators\Rules\MessageLengthRule;
 use ArtARTs36\PushAllSender\Validators\Rules\PriorityRule;
 use ArtARTs36\PushAllSender\Validators\Rules\TitleLengthRule;
@@ -54,6 +55,7 @@ class PushAllSender implements PusherInterface
             MessageLengthRule::class,
             PriorityRule::class,
             TypeRule::class,
+            ActionsCountRule::class,
         ]);
     }
 
