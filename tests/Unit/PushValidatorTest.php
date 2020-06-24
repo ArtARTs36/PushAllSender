@@ -18,10 +18,33 @@ use PHPUnit\Framework\TestCase;
 class PushValidatorTest extends TestCase
 {
     /**
+     * @covers \ArtARTs36\PushAllSender\Validators\PushValidator::__construct
+     */
+    public function testCreateInstance(): void
+    {
+        $rulesClasses = [
+            MessageLengthRule::class,
+            TitleLengthRule::class,
+        ];
+
+        $instance = new class ($rulesClasses) extends PushValidator {
+            public function getRules()
+            {
+                return $this->rules;
+            }
+        };
+
+        self::assertIsArray($rules = $instance->getRules());
+
+        foreach ($rulesClasses as $key => $ruleClass) {
+            self::assertInstanceOf($ruleClass, $rules[$key]);
+        }
+    }
+
+    /**
      * @covers \ArtARTs36\PushAllSender\Validators\Rules\MessageLengthRule::isValid
      * @covers \ArtARTs36\PushAllSender\Validators\PushValidator::validate
      * @covers \ArtARTs36\PushAllSender\Validators\PushValidator::getLastErrorRule
-     * @throws \ArtARTs36\PushAllSender\Exceptions\PushException
      */
     public function testMessageLengthRule(): void
     {

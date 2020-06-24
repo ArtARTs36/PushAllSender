@@ -91,8 +91,8 @@ class PushAllSender implements PusherInterface
             throw new PushValidateException($this->validator->getLastErrorRule());
         }
 
-        if (($msg = $this->push($push))) {
-            return $msg;
+        if (($sendStatus = $this->push($push))) {
+            return $sendStatus;
         }
 
         if (($answer = $this->getAnswer()) && !empty($answer['error'])) {

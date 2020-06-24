@@ -16,7 +16,6 @@ class PushAllSenderTest extends TestCase
 {
     /**
      * @covers \ArtARTs36\PushAllSender\Senders\PushAllSender::pushOrFail
-     * @throws \ArtARTs36\PushAllSender\Exceptions\PushException
      */
     public function testBadWrongApiKey(): void
     {
@@ -38,7 +37,6 @@ class PushAllSenderTest extends TestCase
 
     /**
      * @covers \ArtARTs36\PushAllSender\Senders\PushAllSender::pushOrFail
-     * @throws \ArtARTs36\PushAllSender\Exceptions\PushException
      */
     public function testBadUndefined(): void
     {
@@ -56,5 +54,26 @@ class PushAllSenderTest extends TestCase
         self::expectException(PushUndefinedException::class);
 
         $sender->pushOrFail($push);
+    }
+
+    /**
+     * @covers \ArtARTs36\PushAllSender\Senders\PushAllSender::push
+     */
+    public function testPush(): void
+    {
+        $push = new Push('Title', 'Message');
+
+        $sender = new class(1, 'qwerty') extends PushAllSender {
+            protected function send(array $data): bool
+            {
+                $this->parseAnswer('{}');
+
+                return $this->analyseAnswer();
+            }
+        };
+
+        $status = $sender->push($push);
+
+        self::assertFalse($status);
     }
 }

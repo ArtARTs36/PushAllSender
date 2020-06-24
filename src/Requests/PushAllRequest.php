@@ -39,7 +39,7 @@ class PushAllRequest
 
         if (($id = $push->getRecipientId())) {
             $this->setType(Push::TYPE_UNICAST);
-            $this->setAttribute(static::FIELD_UID, $push->getRecipientId());
+            $this->setAttribute(static::FIELD_UID, $id);
         }
     }
 
