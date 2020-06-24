@@ -16,6 +16,14 @@ class Push
     public const PRIORITY_MIDDLE = 0;
     public const PRIORITY_MAX = 1;
 
+    public const TYPE_BROADCAST = 'broadcast';
+    public const TYPE_UNICAST = 'unicast';
+
+    public const TYPES = [
+        self::TYPE_BROADCAST,
+        self::TYPE_UNICAST,
+    ];
+
     public const PRIORITIES = [
         self::PRIORITY_MIN,
         self::PRIORITY_MIDDLE,
@@ -37,6 +45,8 @@ class Push
     /** @var string|null  */
     public $url;
 
+    private $type;
+
     /**
      * Push constructor.
      * @param string $title
@@ -44,21 +54,24 @@ class Push
      * @param PushRecipientInterface|null $recipient
      * @param string|null $url
      * @param RecipientFriendlyStrategyInterface $recipientFriendlyStrategy
+     * @param string $type
      */
     public function __construct(
         string $title,
         string $message,
         ?PushRecipientInterface $recipient = null,
         ?string $url = null,
-        RecipientFriendlyStrategyInterface $recipientFriendlyStrategy = null
+        RecipientFriendlyStrategyInterface $recipientFriendlyStrategy = null,
+        ?string $type = null
     ) {
         $this->title = $title;
         $this->message = $message;
         $this->recipient = $recipient;
         $this->url = $url;
 
-        $strategy = $recipientFriendlyStrategy ?? new NightMinPriorityStrategy();
-        $this->setPriority($strategy->getPriority());
+        $this->setPriority(($recipientFriendlyStrategy ?? (new NightMinPriorityStrategy()))->getPriority());
+
+        $this->type = $type ?? static::TYPE_BROADCAST;
     }
 
     /**
@@ -112,5 +125,13 @@ class Push
         $this->priority = $priority;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
     }
 }

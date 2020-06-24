@@ -28,7 +28,8 @@ class HourTest extends TestCase
      */
     public function testClearTest(): void
     {
-        $hour = 11;
+        $currentHour = date('H');
+        $hour = abs(rand(0, 23) - $currentHour);
 
         Hour::setTest($hour);
         Hour::clearTest();

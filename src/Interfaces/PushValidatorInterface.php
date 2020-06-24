@@ -15,4 +15,9 @@ interface PushValidatorInterface
      * @return bool
      */
     public function validate(Push $push): bool;
+
+    /**
+     * @return PushValidateRuleInterface
+     */
+    public function getLastErrorRule(): ?PushValidateRuleInterface;
 }

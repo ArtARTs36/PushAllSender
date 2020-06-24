@@ -8,7 +8,7 @@ use ArtARTs36\PushAllSender\Interfaces\PushValidateRuleInterface;
  * Class PushValidateException
  * @package ArtARTs36\PushAllSender\Exceptions
  */
-class PushValidateException extends \Exception
+class PushValidateException extends PushException
 {
     /**
      * PushValidateException constructor.

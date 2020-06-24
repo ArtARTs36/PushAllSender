@@ -8,6 +8,7 @@ use ArtARTs36\PushAllSender\Validators\PushValidator;
 use ArtARTs36\PushAllSender\Validators\Rules\MessageLengthRule;
 use ArtARTs36\PushAllSender\Validators\Rules\PriorityRule;
 use ArtARTs36\PushAllSender\Validators\Rules\TitleLengthRule;
+use ArtARTs36\PushAllSender\Validators\Rules\TypeRule;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -119,6 +120,45 @@ class PushValidatorTest extends TestCase
         self::assertTrue($rule->isValid($push));
         self::assertTrue($rule->isValid($push));
         self::assertInstanceOf(PriorityRule::class, $validator->getLastErrorRule());
+    }
+
+    /**
+     * @covers \ArtARTs36\PushAllSender\Validators\Rules\TypeRule
+     * @covers \ArtARTs36\PushAllSender\Validators\PushValidator::validate
+     * @covers \ArtARTs36\PushAllSender\Validators\PushValidator::getLastErrorRule
+     */
+    public function testTypeRule(): void
+    {
+        $makePushWithType = function (string $type) {
+            return new Push(
+                'Title',
+                'Message',
+                null,
+                null,
+                null,
+                $type,
+            );
+        };
+
+        $push = $makePushWithType($this->generateString(10));
+
+        $rule = new TypeRule();
+
+        $validator = new PushValidator([
+            TypeRule::class,
+        ]);
+
+        self::assertFalse($rule->isValid($push));
+        self::assertFalse($validator->validate($push));
+        self::assertInstanceOf(TypeRule::class, $validator->getLastErrorRule());
+
+        //
+
+        $push = $makePushWithType(Push::TYPE_BROADCAST);
+
+        self::assertTrue($rule->isValid($push));
+        self::assertTrue($rule->isValid($push));
+        self::assertInstanceOf(TypeRule::class, $validator->getLastErrorRule());
     }
 
     /**

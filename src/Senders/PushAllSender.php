@@ -9,10 +9,12 @@ use ArtARTs36\PushAllSender\Exceptions\PushWrongApiKeyException;
 use ArtARTs36\PushAllSender\Interfaces\PusherInterface;
 use ArtARTs36\PushAllSender\Interfaces\PushValidatorInterface;
 use ArtARTs36\PushAllSender\Push;
+use ArtARTs36\PushAllSender\Requests\PushAllRequest;
 use ArtARTs36\PushAllSender\Validators\PushValidator;
 use ArtARTs36\PushAllSender\Validators\Rules\MessageLengthRule;
 use ArtARTs36\PushAllSender\Validators\Rules\PriorityRule;
 use ArtARTs36\PushAllSender\Validators\Rules\TitleLengthRule;
+use ArtARTs36\PushAllSender\Validators\Rules\TypeRule;
 
 /**
  * Class PushAllSender
@@ -51,6 +53,7 @@ class PushAllSender implements PusherInterface
             TitleLengthRule::class,
             MessageLengthRule::class,
             PriorityRule::class,
+            TypeRule::class,
         ]);
     }
 
@@ -61,7 +64,7 @@ class PushAllSender implements PusherInterface
      *  Отправляем в this->send()
      *
      * @param Push $push
-     * @return bool|mixed|null
+     * @return bool
      */
     public function push(Push $push): bool
     {
@@ -69,25 +72,13 @@ class PushAllSender implements PusherInterface
             return false;
         }
 
-        $request = [
-            'type' => 'broadcast',
-            'id' => $this->channelId,
-            'key' => $this->apiKey,
-            'text' => $push->message,
-            'title' => $push->title,
-            'priority' => $push->getPriority(),
-        ];
+        $request = new PushAllRequest(
+            $this->channelId,
+            $this->apiKey,
+            $push
+        );
 
-        if ($push->url !== null) {
-            $request['url'] = $push->url;
-        }
-
-        if (($id = $push->getRecipientId())) {
-            $request['type'] = 'unicast';
-            $request['uid'] = $id;
-        }
-
-        return $this->send($request);
+        return $this->send($request->getAttributes());
     }
 
     /**
