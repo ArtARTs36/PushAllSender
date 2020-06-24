@@ -4,9 +4,14 @@ namespace ArtARTs36\PushAllSender\Senders;
 
 use ArtARTs36\PushAllSender\Exceptions\PushException;
 use ArtARTs36\PushAllSender\Exceptions\PushUndefinedException;
+use ArtARTs36\PushAllSender\Exceptions\PushValidateException;
 use ArtARTs36\PushAllSender\Exceptions\PushWrongApiKeyException;
 use ArtARTs36\PushAllSender\Interfaces\PusherInterface;
+use ArtARTs36\PushAllSender\Interfaces\PushValidatorInterface;
 use ArtARTs36\PushAllSender\Push;
+use ArtARTs36\PushAllSender\Validators\PushValidator;
+use ArtARTs36\PushAllSender\Validators\Rules\MessageLengthRule;
+use ArtARTs36\PushAllSender\Validators\Rules\TitleLengthRule;
 
 /**
  * Class PushAllSender
@@ -28,15 +33,23 @@ class PushAllSender implements PusherInterface
     /** @var mixed */
     protected $answer;
 
+    /** @var PushValidatorInterface|PushValidator */
+    protected $validator;
+
     /**
      * PushAllSender constructor.
      * @param int $channelId
      * @param string $apiKey
+     * @param PushValidatorInterface|null $validator
      */
-    public function __construct(int $channelId, string $apiKey)
+    public function __construct(int $channelId, string $apiKey, PushValidatorInterface $validator = null)
     {
         $this->channelId = $channelId;
         $this->apiKey = $apiKey;
+        $this->validator = $validator ?? new PushValidator([
+            TitleLengthRule::class,
+            MessageLengthRule::class,
+        ]);
     }
 
     /**
@@ -50,6 +63,10 @@ class PushAllSender implements PusherInterface
      */
     public function push(Push $push): bool
     {
+        if (!$this->validator->validate($push)) {
+            return false;
+        }
+
         $request = [
             'type' => 'broadcast',
             'id' => $this->channelId,
@@ -73,9 +90,14 @@ class PushAllSender implements PusherInterface
 
     /**
      * @inheritDoc
+     * @throws PushValidateException
      */
     public function pushOrFail(Push $push): bool
     {
+        if (!$this->validator->validate($push)) {
+            throw new PushValidateException($this->validator->getLastErrorRule());
+        }
+
         if (($msg = $this->push($push))) {
             return $msg;
         }

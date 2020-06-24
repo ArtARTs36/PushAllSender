@@ -16,6 +16,7 @@
             <directory suffix="HourTest.php">./tests/Unit</directory>
             <directory suffix="NightMinPriorityStrategyTest.php">./tests/Unit</directory>
             <directory suffix="PushTest.php">./tests/Unit</directory>
+            <directory suffix="PushValidatorTest.php">./tests/Unit</directory>
         </testsuite>
     </testsuites>
     <filter>
