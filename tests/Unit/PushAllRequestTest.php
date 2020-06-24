@@ -14,6 +14,7 @@ class PushAllRequestTest extends TestCase
 {
     /**
      * @covers \ArtARTs36\PushAllSender\Requests\PushAllRequest
+     * @covers \ArtARTs36\PushAllSender\Requests\PushAllRequest::getAttributes
      */
     public function test(): void
     {
@@ -53,5 +54,69 @@ class PushAllRequestTest extends TestCase
         self::assertEquals($push->getPriority(), $attributes[PushAllRequest::FIELD_PRIORITY]);
 
         self::assertArrayNotHasKey(PushAllRequest::FIELD_UID, $attributes);
+    }
+
+    /**
+     * @covers \ArtARTs36\PushAllSender\Requests\PushAllRequest::setType
+     */
+    public function testSetType(): void
+    {
+        $type = Push::TYPE_BROADCAST;
+
+        $instance = new PushAllRequest(...$this->instanceSimpleParams());
+
+        $instance->setType($type);
+
+        $response = $instance->getAttributes();
+
+        self::assertArrayHasKey(PushAllRequest::FIELD_TYPE, $response);
+        self::assertEquals($type, $response[PushAllRequest::FIELD_TYPE]);
+    }
+
+    /**
+     * @covers \ArtARTs36\PushAllSender\Requests\PushAllRequest::setAttributeWhen
+     */
+    public function testSetAttributeWhen(): void
+    {
+        $instance = new class(...$this->instanceSimpleParams()) extends PushAllRequest {
+            public function setAttributeWhen(bool $condition, $field, $value): PushAllRequest
+            {
+                return parent::setAttributeWhen($condition, $field, $value);
+            }
+        };
+
+        //
+
+        $msg = 'Hello';
+
+        $instance->setAttributeWhen(true, PushAllRequest::FIELD_MESSAGE, $msg);
+
+        $attributes = $instance->getAttributes();
+
+        self::assertArrayHasKey(PushAllRequest::FIELD_MESSAGE, $attributes);
+        self::assertEquals($msg, $attributes[PushAllRequest::FIELD_MESSAGE]);
+
+        //
+
+        $title = 'Notified';
+
+        $instance->setAttributeWhen(false, PushAllRequest::FIELD_TITLE, $title);
+
+        $attributes = $instance->getAttributes();
+
+        self::assertArrayHasKey(PushAllRequest::FIELD_TITLE, $attributes);
+        self::assertNotEquals($title, $attributes[PushAllRequest::FIELD_TITLE]);
+    }
+
+    /**
+     * @return array
+     */
+    protected function instanceSimpleParams(): array
+    {
+        return [
+            1,
+            'qwerty',
+            new Push('Title', 'Message'),
+        ];
     }
 }

@@ -14,6 +14,9 @@ class PushAdditional implements Arrayable
     /** @var array|PushAction[] */
     private $actions = [];
 
+    /** @var string|null */
+    private $bigImage;
+
     /**
      * @param string $title
      * @param string $url
@@ -49,7 +52,34 @@ class PushAdditional implements Arrayable
      */
     public function isEmpty(): bool
     {
-        return empty($this->actions);
+        return empty($this->actions) && empty($this->bigImage);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotEmpty(): bool
+    {
+        return ! $this->isEmpty();
+    }
+
+    /**
+     * @param string $bigImage
+     * @return $this
+     */
+    public function setBigImage(string $bigImage): self
+    {
+        $this->bigImage = $bigImage;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBigImage(): ?string
+    {
+        return $this->bigImage;
     }
 
     /**
@@ -57,14 +87,18 @@ class PushAdditional implements Arrayable
      */
     public function toArray(): array
     {
-        if ($this->isEmpty()) {
-            return [];
+        $array = [];
+
+        if (!empty($this->bigImage)) {
+            $array[PushAllRequest::FIELD_BIG_IMAGE] = $this->bigImage;
         }
 
-        return [
-            PushAllRequest::FIELD_ACTIONS => array_map(function (PushAction $action) {
+        if (!empty($this->actions)) {
+            $array[PushAllRequest::FIELD_ACTIONS] = array_map(function (PushAction $action) {
                 return $action->toArray();
-            }, $this->actions),
-        ];
+            }, $this->actions);
+        }
+
+        return $array;
     }
 }

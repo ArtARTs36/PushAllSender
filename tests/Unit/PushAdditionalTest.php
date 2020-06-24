@@ -18,6 +18,15 @@ class PushAdditionalTest extends TestCase
 
         self::assertTrue($instance->isEmpty());
     }
+    /**
+     * @covers \ArtARTs36\PushAllSender\PushAdditional::isNotEmpty
+     */
+    public function testIsNotEmpty(): void
+    {
+        $instance = new PushAdditional();
+
+        self::assertFalse($instance->isNotEmpty());
+    }
 
     /**
      * @covers \ArtARTs36\PushAllSender\PushAdditional::toArray
@@ -87,5 +96,26 @@ class PushAdditionalTest extends TestCase
 
         self::assertArrayHasKey(0, $response);
         self::assertEquals($action->toArray(), $response[0]->toArray());
+    }
+
+    /**
+     * @covers \ArtARTs36\PushAllSender\PushAdditional::setBigImage
+     * @covers \ArtARTs36\PushAllSender\PushAdditional::getBigImage
+     * @covers \ArtARTs36\PushAllSender\PushAdditional::toArray
+     */
+    public function testBigImage(): void
+    {
+        $bigImage = 'http://site.ru/image.png';
+
+        $instance = new PushAdditional();
+
+        $instance->setBigImage($bigImage);
+
+        self::assertEquals($bigImage, $instance->getBigImage());
+
+        $response = $instance->toArray();
+
+        self::assertArrayHasKey(PushAllRequest::FIELD_BIG_IMAGE, $response);
+        self::assertEquals($bigImage, $response[PushAllRequest::FIELD_BIG_IMAGE]);
     }
 }

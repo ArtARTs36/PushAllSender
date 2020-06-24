@@ -20,6 +20,7 @@ class PushAllRequest
     public const FIELD_UID = 'uid';
     public const FIELD_ADDITIONAL = 'additional';
     public const FIELD_ACTIONS = 'actions';
+    public const FIELD_BIG_IMAGE = 'bigimage';
 
     private $attributes;
 
@@ -44,12 +45,8 @@ class PushAllRequest
             $this->setAttribute(static::FIELD_UID, $id);
         }
 
-        if (!$push->additional()->isEmpty()) {
-            $this->attributes = array_merge($this->attributes, $push->additional()->toArray());
-        }
-
         $this->setAttributeWhen(
-            !$push->additional()->isEmpty(),
+            $push->additional()->isNotEmpty(),
             static::FIELD_ADDITIONAL,
             json_encode($push->additional()->toArray())
         );

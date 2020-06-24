@@ -14,6 +14,7 @@ class PushActionTest extends TestCase
 {
     /**
      * @covers \ArtARTs36\PushAllSender\PushAction::toArray
+     * @covers \ArtARTs36\PushAllSender\PushAction::__construct
      */
     public function testToArray(): void
     {

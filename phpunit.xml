@@ -19,6 +19,7 @@
             <directory suffix="PushValidatorTest.php">./tests/Unit</directory>
             <directory suffix="PushActionTest.php">./tests/Unit</directory>
             <directory suffix="PushAdditionalTest.php">./tests/Unit</directory>
+            <directory suffix="PushAllRequestTest.php">./tests/Unit</directory>
         </testsuite>
     </testsuites>
     <filter>
