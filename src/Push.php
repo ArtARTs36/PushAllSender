@@ -2,8 +2,6 @@
 
 namespace ArtARTs36\PushAllSender;
 
-use ArtARTs36\PushAllSender\Exceptions\PushException;
-use ArtARTs36\PushAllSender\Exceptions\PushIncorrectPriorityException;
 use ArtARTs36\PushAllSender\Interfaces\PushRecipientInterface;
 use ArtARTs36\PushAllSender\Strategies\RecipientFriendlyStrategy\NightMinPriorityStrategy;
 use ArtARTs36\PushAllSender\Strategies\RecipientFriendlyStrategy\RecipientFriendlyStrategyInterface;
@@ -46,13 +44,12 @@ class Push
      * @param PushRecipientInterface|null $recipient
      * @param string|null $url
      * @param RecipientFriendlyStrategyInterface $recipientFriendlyStrategy
-     * @throws PushException
      */
     public function __construct(
         string $title,
         string $message,
-        PushRecipientInterface $recipient = null,
-        string $url = null,
+        ?PushRecipientInterface $recipient = null,
+        ?string $url = null,
         RecipientFriendlyStrategyInterface $recipientFriendlyStrategy = null
     ) {
         $this->title = $title;
@@ -60,9 +57,8 @@ class Push
         $this->recipient = $recipient;
         $this->url = $url;
 
-        $this->setRecipientFriendlyPriority(
-            $recipientFriendlyStrategy ?? new NightMinPriorityStrategy()
-        );
+        $strategy = $recipientFriendlyStrategy ?? new NightMinPriorityStrategy();
+        $this->setPriority($strategy->getPriority());
     }
 
     /**
@@ -108,22 +104,6 @@ class Push
     }
 
     /**
-     * @param RecipientFriendlyStrategyInterface $recipientFriendlyStrategy
-     * @return $this
-     * @throws PushException
-     */
-    public function setRecipientFriendlyPriority(RecipientFriendlyStrategyInterface $recipientFriendlyStrategy): self
-    {
-        if (($priority = $recipientFriendlyStrategy->getPriority()) && !$this->checkPriority($priority)) {
-            throw new PushIncorrectPriorityException();
-        }
-
-        $this->priority = $priority;
-
-        return $this;
-    }
-
-    /**
      * @param int $priority
      * @return $this
      */
@@ -132,14 +112,5 @@ class Push
         $this->priority = $priority;
 
         return $this;
-    }
-
-    /**
-     * @param int $priority
-     * @return bool
-     */
-    protected function checkPriority(int $priority): bool
-    {
-        return in_array($priority, static::PRIORITIES);
     }
 }

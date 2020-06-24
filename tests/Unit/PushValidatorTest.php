@@ -3,8 +3,10 @@
 namespace ArtARTs36\PushAllSender\Tests\Unit;
 
 use ArtARTs36\PushAllSender\Push;
+use ArtARTs36\PushAllSender\Strategies\RecipientFriendlyStrategy\RecipientFriendlyStrategyInterface;
 use ArtARTs36\PushAllSender\Validators\PushValidator;
 use ArtARTs36\PushAllSender\Validators\Rules\MessageLengthRule;
+use ArtARTs36\PushAllSender\Validators\Rules\PriorityRule;
 use ArtARTs36\PushAllSender\Validators\Rules\TitleLengthRule;
 use PHPUnit\Framework\TestCase;
 
@@ -79,6 +81,44 @@ class PushValidatorTest extends TestCase
         self::assertTrue($rule->isValid($push));
         self::assertTrue($validator->validate($push));
         self::assertInstanceOf(TitleLengthRule::class, $validator->getLastErrorRule());
+    }
+
+    /**
+     * @covers \ArtARTs36\PushAllSender\Validators\Rules\PriorityRule::isValid
+     * @covers \ArtARTs36\PushAllSender\Validators\PushValidator::validate
+     * @covers \ArtARTs36\PushAllSender\Validators\PushValidator::getLastErrorRule
+     */
+    public function testPriorityRule(): void
+    {
+        $strategy = new class implements RecipientFriendlyStrategyInterface {
+            /**
+             * @inheritDoc
+             */
+            public function getPriority(): int
+            {
+                return 5;
+            }
+        };
+
+        $push = new Push('Title', 'Message', null, null, $strategy);
+
+        $rule = new PriorityRule();
+
+        $validator = new PushValidator([
+            PriorityRule::class,
+        ]);
+
+        self::assertFalse($rule->isValid($push));
+        self::assertFalse($validator->validate($push));
+        self::assertInstanceOf(PriorityRule::class, $validator->getLastErrorRule());
+
+        //
+
+        $push->setMiddlePriority();
+
+        self::assertTrue($rule->isValid($push));
+        self::assertTrue($rule->isValid($push));
+        self::assertInstanceOf(PriorityRule::class, $validator->getLastErrorRule());
     }
 
     /**
