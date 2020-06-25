@@ -38,7 +38,9 @@ class PushAllRequest
             static::FIELD_PRIORITY => $push->getPriority(),
         ];
 
-        $this->setAttributeWhen(!empty($push->url), static::FIELD_URL, $push->url);
+        $this->setAttributeWhen(!empty($push->url), static::FIELD_URL, function () use ($push) {
+            return $push->url;
+        });
 
         if (($id = $push->getRecipientId())) {
             $this->setType(Push::TYPE_UNICAST);
@@ -48,7 +50,9 @@ class PushAllRequest
         $this->setAttributeWhen(
             $push->additional()->isNotEmpty(),
             static::FIELD_ADDITIONAL,
-            json_encode($push->additional()->toArray())
+            function () use ($push) {
+                return json_encode($push->additional()->toArray());
+            }
         );
     }
 
@@ -72,12 +76,12 @@ class PushAllRequest
     /**
      * @param bool $condition
      * @param $field
-     * @param $value
+     * @param \Closure $value
      * @return $this
      */
-    protected function setAttributeWhen(bool $condition, $field, $value): self
+    protected function setAttributeWhen(bool $condition, $field, \Closure $value): self
     {
-        ($condition === true) && $this->setAttribute($field, $value);
+        ($condition === true) && $this->setAttribute($field, $value());
 
         return $this;
     }

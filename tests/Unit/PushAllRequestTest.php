@@ -89,7 +89,9 @@ class PushAllRequestTest extends TestCase
 
         $msg = 'Hello';
 
-        $instance->setAttributeWhen(true, PushAllRequest::FIELD_MESSAGE, $msg);
+        $instance->setAttributeWhen(true, PushAllRequest::FIELD_MESSAGE, function () use ($msg) {
+            return $msg;
+        });
 
         $attributes = $instance->getAttributes();
 
@@ -100,7 +102,9 @@ class PushAllRequestTest extends TestCase
 
         $title = 'Notified';
 
-        $instance->setAttributeWhen(false, PushAllRequest::FIELD_TITLE, $title);
+        $instance->setAttributeWhen(false, PushAllRequest::FIELD_TITLE, function () use ($title) {
+            return $title;
+        });
 
         $attributes = $instance->getAttributes();
 
