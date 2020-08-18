@@ -13,7 +13,7 @@ class PushAllRequest
     public const FIELD_TYPE = 'type';
     public const FIELD_API_KEY = 'key';
     public const FIELD_CHANNEL_ID = 'id';
-    public const FIELD_MESSAGE = 'message';
+    public const FIELD_MESSAGE = 'text';
     public const FIELD_TITLE = 'title';
     public const FIELD_URL = 'url';
     public const FIELD_PRIORITY = 'priority';
