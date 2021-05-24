@@ -3,6 +3,9 @@
 namespace ArtARTs36\PushAllSender\Interfaces;
 
 use ArtARTs36\PushAllSender\Exceptions\PushException;
+use ArtARTs36\PushAllSender\Exceptions\PushUndefinedException;
+use ArtARTs36\PushAllSender\Exceptions\PushValidateException;
+use ArtARTs36\PushAllSender\Exceptions\PushWrongApiKeyException;
 use ArtARTs36\PushAllSender\Push;
 
 /**
@@ -11,16 +14,13 @@ use ArtARTs36\PushAllSender\Push;
  */
 interface PusherInterface
 {
-    /**
-     * @param Push $push
-     * @return mixed
-     */
     public function push(Push $push): bool;
 
     /**
-     * @param Push $push
+     * @throws PushValidateException
+     * @throws PushUndefinedException
+     * @throws PushWrongApiKeyException
      * @throws PushException
-     * @return mixed
      */
     public function pushOrFail(Push $push): bool;
 }

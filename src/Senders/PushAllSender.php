@@ -17,36 +17,21 @@ use ArtARTs36\PushAllSender\Validators\Rules\PriorityRule;
 use ArtARTs36\PushAllSender\Validators\Rules\TitleLengthRule;
 use ArtARTs36\PushAllSender\Validators\Rules\TypeRule;
 
-/**
- * Class PushAllSender
- * @package ArtARTs36\PushAllSender\Senders
- */
 class PushAllSender implements PusherInterface
 {
     public const ERROR_WRONG_KEY = 'wrong key';
-
-    /** @var string  */
     public const API_URL = 'https://pushall.ru/api.php';
 
-    /** @var int */
     private $channelId;
 
-    /** @var string */
     private $apiKey;
 
     /** @var mixed */
     protected $answer;
 
-    /** @var PushValidatorInterface|PushValidator */
     protected $validator;
 
-    /**
-     * PushAllSender constructor.
-     * @param int $channelId
-     * @param string $apiKey
-     * @param PushValidatorInterface|null $validator
-     */
-    public function __construct(int $channelId, string $apiKey, PushValidatorInterface $validator = null)
+    public function __construct(int $channelId, string $apiKey, ?PushValidatorInterface $validator = null)
     {
         $this->channelId = $channelId;
         $this->apiKey = $apiKey;
@@ -70,7 +55,7 @@ class PushAllSender implements PusherInterface
      */
     public function push(Push $push): bool
     {
-        if (!$this->validator->validate($push)) {
+        if (! $this->validator->validate($push)) {
             return false;
         }
 
@@ -85,11 +70,10 @@ class PushAllSender implements PusherInterface
 
     /**
      * @inheritDoc
-     * @throws PushValidateException
      */
     public function pushOrFail(Push $push): bool
     {
-        if (!$this->validator->validate($push)) {
+        if (! $this->validator->validate($push)) {
             throw new PushValidateException($this->validator->getLastErrorRule());
         }
 
@@ -112,7 +96,6 @@ class PushAllSender implements PusherInterface
 
     /**
      * @param array $data
-     * @return bool
      */
     protected function send(array $data): bool
     {
@@ -141,9 +124,6 @@ class PushAllSender implements PusherInterface
         $this->answer = json_decode($answer, true) ?? null;
     }
 
-    /**
-     * @return bool
-     */
     protected function analyseAnswer(): bool
     {
         if (is_array($this->answer) && !empty($this->answer['success']) && $this->answer['success'] === 1) {
@@ -153,9 +133,6 @@ class PushAllSender implements PusherInterface
         return false;
     }
 
-    /**
-     * @return mixed
-     */
     public function getAnswer()
     {
         return $this->answer;
