@@ -8,10 +8,6 @@ use ArtARTs36\PushAllSender\Exceptions\PushValidateException;
 use ArtARTs36\PushAllSender\Exceptions\PushWrongApiKeyException;
 use ArtARTs36\PushAllSender\Push;
 
-/**
- * Interface PusherInterface
- * @package ArtARTs36\PushAllSender\Interfaces
- */
 interface PusherInterface
 {
     public function push(Push $push): bool;

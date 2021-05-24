@@ -49,9 +49,6 @@ class PushAllSender implements PusherInterface
      *
      *  Формируем массив для отправки на PushAll
      *  Отправляем в this->send()
-     *
-     * @param Push $push
-     * @return bool
      */
     public function push(Push $push): bool
     {

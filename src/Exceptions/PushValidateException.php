@@ -16,7 +16,7 @@ class PushValidateException extends PushException
      * @param int $code
      * @param \Throwable|null $previous
      */
-    public function __construct(PushValidateRuleInterface $rule, $code = 0, \Throwable $previous = null)
+    public function __construct(PushValidateRuleInterface $rule, $code = 0, ?\Throwable $previous = null)
     {
         $message = 'Validation failed in rule: '. get_class($rule);
 
