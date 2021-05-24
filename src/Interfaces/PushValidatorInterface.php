@@ -10,14 +10,7 @@ use ArtARTs36\PushAllSender\Push;
  */
 interface PushValidatorInterface
 {
-    /**
-     * @param Push $push
-     * @return bool
-     */
     public function validate(Push $push): bool;
 
-    /**
-     * @return PushValidateRuleInterface
-     */
     public function getLastErrorRule(): ?PushValidateRuleInterface;
 }
