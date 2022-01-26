@@ -26,7 +26,7 @@ class PushAllRequest
         string $apiKey,
         Push $push
     ) {
-        $this->attributes = [
+        $this->attributes = [ // @phpstan-ignore-line because detect keys as (string|int)
             static::FIELD_TYPE => $push->getType(),
             static::FIELD_CHANNEL_ID => $channelId,
             static::FIELD_API_KEY => $apiKey,
@@ -86,7 +86,7 @@ class PushAllRequest
     }
 
     /**
-     * @param mixed $field
+     * @param string $field
      * @param mixed $value
      * @return $this
      */

@@ -26,10 +26,10 @@ class Push
         self::PRIORITY_MAX,
     ];
 
-    /** @var string|null  */
+    /** @var string */
     public $title;
 
-    /** @var string|null  */
+    /** @var string */
     public $message;
 
     /** @var PushRecipientInterface|null  */
@@ -47,16 +47,6 @@ class Push
     /** @var PushAdditional */
     private $additional;
 
-    /**
-     * Push constructor.
-     * @param string $title
-     * @param string $message
-     * @param PushRecipientInterface|null $recipient
-     * @param string|null $url
-     * @param RecipientFriendlyStrategyInterface $recipientFriendlyStrategy
-     * @param string $type
-     * @param PushAdditional|null $additional
-     */
     public function __construct(
         string $title,
         string $message,
@@ -133,7 +123,7 @@ class Push
     /**
      * @return string
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }

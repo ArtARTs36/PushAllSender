@@ -73,7 +73,7 @@ class PushAllSender implements PusherInterface
      */
     public function pushOrFail(Push $push): bool
     {
-        if (! $this->validator->validate($push)) {
+        if (! $this->validator->validate($push) && $this->validator->getLastErrorRule()) {
             throw new PushValidateException($this->validator->getLastErrorRule());
         }
 
