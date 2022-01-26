@@ -81,7 +81,7 @@ class PushAllSender implements PusherInterface
             return $sendStatus;
         }
 
-        if (($answer = $this->getAnswer()) && !empty($answer['error'])) {
+        if (($answer = $this->getAnswer()) && is_array($answer) && !empty($answer['error'])) {
             switch ($answer['error']) {
                 case static::ERROR_WRONG_KEY:
                     throw new PushWrongApiKeyException();
@@ -117,11 +117,11 @@ class PushAllSender implements PusherInterface
     }
 
     /**
-     * @param mixed $answer
+     * @param string|mixed $answer
      */
     protected function parseAnswer($answer): void
     {
-        $this->answer = json_decode($answer, true) ?? null;
+        $this->answer = is_string($answer) ? (json_decode($answer, true) ?? null) : null;
     }
 
     protected function analyseAnswer(): bool
