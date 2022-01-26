@@ -4,10 +4,6 @@ namespace ArtARTs36\PushAllSender\Requests;
 
 use ArtARTs36\PushAllSender\Push;
 
-/**
- * Class PushAllRequest
- * @package ArtARTs36\PushAllSender\Requests
- */
 class PushAllRequest
 {
     public const FIELD_TYPE = 'type';
@@ -75,13 +71,15 @@ class PushAllRequest
 
     /**
      * @param bool $condition
-     * @param $field
+     * @param string $field
      * @param \Closure $value
      * @return $this
      */
     protected function setAttributeWhen(bool $condition, $field, \Closure $value): self
     {
-        ($condition === true) && $this->setAttribute($field, $value());
+        if ($condition === true) {
+            $this->setAttribute($field, $value());
+        }
 
         return $this;
     }
