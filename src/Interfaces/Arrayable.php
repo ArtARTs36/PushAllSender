@@ -9,7 +9,7 @@ namespace ArtARTs36\PushAllSender\Interfaces;
 interface Arrayable
 {
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray(): array;
 }

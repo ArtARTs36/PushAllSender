@@ -22,13 +22,16 @@ class PushAllSender implements PusherInterface
     public const ERROR_WRONG_KEY = 'wrong key';
     public const API_URL = 'https://pushall.ru/api.php';
 
+    /** @var int */
     private $channelId;
 
+    /** @var string */
     private $apiKey;
 
     /** @var mixed */
     protected $answer;
 
+    /** @var PushValidatorInterface */
     protected $validator;
 
     public function __construct(int $channelId, string $apiKey, ?PushValidatorInterface $validator = null)
@@ -92,7 +95,7 @@ class PushAllSender implements PusherInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      */
     protected function send(array $data): bool
     {
@@ -130,6 +133,9 @@ class PushAllSender implements PusherInterface
         return false;
     }
 
+    /**
+     * @return mixed
+     */
     public function getAnswer()
     {
         return $this->answer;

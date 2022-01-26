@@ -14,6 +14,9 @@ class PushValidator implements PushValidatorInterface
     /** @var PushValidateRuleInterface|null */
     protected $lastErrorRule;
 
+    /**
+     * @param array<class-string<PushValidateRuleInterface>> $rules
+     */
     public function __construct(array $rules)
     {
         $this->rules = array_map(function ($class) {

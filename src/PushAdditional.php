@@ -82,9 +82,6 @@ class PushAdditional implements Arrayable
         return $this->bigImage;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function toArray(): array
     {
         $array = [];

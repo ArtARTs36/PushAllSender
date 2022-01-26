@@ -6,10 +6,6 @@ use ArtARTs36\PushAllSender\Interfaces\PushRecipientInterface;
 use ArtARTs36\PushAllSender\Strategies\RecipientFriendlyStrategy\NightMinPriorityStrategy;
 use ArtARTs36\PushAllSender\Strategies\RecipientFriendlyStrategy\RecipientFriendlyStrategyInterface;
 
-/**
- * Class Push
- * @package App\Senders
- */
 class Push
 {
     public const PRIORITY_MIN = -1;
@@ -48,6 +44,7 @@ class Push
     /** @var string|null */
     private $type;
 
+    /** @var PushAdditional */
     private $additional;
 
     /**

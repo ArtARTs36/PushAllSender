@@ -18,6 +18,7 @@ class PushAllRequest
     public const FIELD_ACTIONS = 'actions';
     public const FIELD_BIG_IMAGE = 'bigimage';
 
+    /** @var array<string, mixed> */
     private $attributes;
 
     public function __construct(
@@ -53,7 +54,7 @@ class PushAllRequest
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getAttributes(): array
     {

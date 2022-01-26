@@ -28,9 +28,6 @@ final class PushAction implements Arrayable
         $this->url = $url;
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return [
