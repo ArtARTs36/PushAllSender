@@ -4,10 +4,6 @@ namespace ArtARTs36\PushAllSender\Requests;
 
 use ArtARTs36\PushAllSender\Push;
 
-/**
- * Class PushAllRequest
- * @package ArtARTs36\PushAllSender\Requests
- */
 class PushAllRequest
 {
     public const FIELD_TYPE = 'type';
@@ -22,6 +18,7 @@ class PushAllRequest
     public const FIELD_ACTIONS = 'actions';
     public const FIELD_BIG_IMAGE = 'bigimage';
 
+    /** @var array<string, mixed> */
     private $attributes;
 
     public function __construct(
@@ -29,7 +26,7 @@ class PushAllRequest
         string $apiKey,
         Push $push
     ) {
-        $this->attributes = [
+        $this->attributes = [ // @phpstan-ignore-line because detect keys as (string|int)
             static::FIELD_TYPE => $push->getType(),
             static::FIELD_CHANNEL_ID => $channelId,
             static::FIELD_API_KEY => $apiKey,
@@ -57,7 +54,7 @@ class PushAllRequest
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getAttributes(): array
     {
@@ -75,19 +72,21 @@ class PushAllRequest
 
     /**
      * @param bool $condition
-     * @param $field
+     * @param string $field
      * @param \Closure $value
      * @return $this
      */
     protected function setAttributeWhen(bool $condition, $field, \Closure $value): self
     {
-        ($condition === true) && $this->setAttribute($field, $value());
+        if ($condition === true) {
+            $this->setAttribute($field, $value());
+        }
 
         return $this;
     }
 
     /**
-     * @param mixed $field
+     * @param string $field
      * @param mixed $value
      * @return $this
      */

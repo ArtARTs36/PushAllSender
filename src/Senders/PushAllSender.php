@@ -22,13 +22,16 @@ class PushAllSender implements PusherInterface
     public const ERROR_WRONG_KEY = 'wrong key';
     public const API_URL = 'https://pushall.ru/api.php';
 
+    /** @var int */
     private $channelId;
 
+    /** @var string */
     private $apiKey;
 
     /** @var mixed */
     protected $answer;
 
+    /** @var PushValidatorInterface */
     protected $validator;
 
     public function __construct(int $channelId, string $apiKey, ?PushValidatorInterface $validator = null)
@@ -70,7 +73,7 @@ class PushAllSender implements PusherInterface
      */
     public function pushOrFail(Push $push): bool
     {
-        if (! $this->validator->validate($push)) {
+        if (! $this->validator->validate($push) && $this->validator->getLastErrorRule()) {
             throw new PushValidateException($this->validator->getLastErrorRule());
         }
 
@@ -78,7 +81,7 @@ class PushAllSender implements PusherInterface
             return $sendStatus;
         }
 
-        if (($answer = $this->getAnswer()) && !empty($answer['error'])) {
+        if (($answer = $this->getAnswer()) && is_array($answer) && !empty($answer['error'])) {
             switch ($answer['error']) {
                 case static::ERROR_WRONG_KEY:
                     throw new PushWrongApiKeyException();
@@ -92,7 +95,7 @@ class PushAllSender implements PusherInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      */
     protected function send(array $data): bool
     {
@@ -114,11 +117,11 @@ class PushAllSender implements PusherInterface
     }
 
     /**
-     * @param mixed $answer
+     * @param string|mixed $answer
      */
     protected function parseAnswer($answer): void
     {
-        $this->answer = json_decode($answer, true) ?? null;
+        $this->answer = is_string($answer) ? (json_decode($answer, true) ?? null) : null;
     }
 
     protected function analyseAnswer(): bool
@@ -130,6 +133,9 @@ class PushAllSender implements PusherInterface
         return false;
     }
 
+    /**
+     * @return mixed
+     */
     public function getAnswer()
     {
         return $this->answer;
